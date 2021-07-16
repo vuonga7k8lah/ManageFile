@@ -9,13 +9,13 @@ class Route
     private static $_sefl  = null;
     private static $aRoute = null;
 
-    public static function Load($route)
+
+    public static function Load($route): ?Route
     {
         if (self::$_sefl == null) {
             self::$_sefl = new self();
         }
-        $aRoute = self::$_sefl;
-        include $route;
+        self::$aRoute = App::get($route);
         return self::$_sefl;
     }
 
@@ -34,6 +34,11 @@ class Route
         self::$aRoute['PUT'][$uri] = $controller;
     }
 
+    public static function delete($uri, $controller)
+    {
+        self::$aRoute['DELETE'][$uri] = $controller;
+    }
+
     public function direct($uri, $method)
     {
         if (!$controller = $this->routeIsExist($uri, $method)) {
@@ -41,7 +46,7 @@ class Route
             die();
         } else {
             $oinit = explode('@', $controller);
-            $this->callRoute($oinit[0], $oinit[1],$this->getPara($method));
+            $this->callRoute($oinit[0], $oinit[1], $this->getPara($method));
         }
     }
 
@@ -52,7 +57,6 @@ class Route
 
     public function callRoute($controller, $method, $para = [])
     {
-
         $oInit = new $controller;
         call_user_func_array([$oInit, $method], [$para]);
     }
@@ -69,14 +73,25 @@ class Route
                 $aData = $_POST;
                 break;
             case 'PUT':
-                $aData=[];
-                $rawData=file_get_contents("php://input");
-                foreach (explode('&',$rawData) as $data){
-                    $aCoverData=explode('=',$data);
-                    $aData[$aCoverData[0]]=$aCoverData[1];
+                $aData = [];
+                $rawData = file_get_contents("php://input");
+                foreach (explode('&', $rawData) as $data) {
+                    $aCoverData = explode('=', $data);
+                    $aData[$aCoverData[0]] = $aCoverData[1];
                 }
                 break;
         }
         return $aData;
+    }
+
+    public function directRoute($aUri, $method)
+    {
+        if (!$controller = $this->routeIsExist($aUri['route'], $method)) {
+            echo "404";
+            die();
+        } else {
+            $oinit = explode('@', $controller);
+            $this->callRoute($oinit[0], $oinit[1], $aUri);
+        }
     }
 }

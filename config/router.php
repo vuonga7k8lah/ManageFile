@@ -1,9 +1,16 @@
 <?php
-/**
- * @var $aRoute \ManageFile\Core\Route
- */
-$aRoute->get('home','ManageFile\Controller\HomeController@loadView');
-$aRoute->put('home','ManageFile\Controller\HomeController@testUpdate');
-$aRoute->post('home','ManageFile\Controller\HomeController@testPost');
-//Manage File
-$aRoute->post('files','ManageFile\Controller\ManageFIleController@createFile');
+return [
+    'get'    => [
+        'projects' => 'ManageFile\Controller\ManageFIleController@getProjects',
+        'projects/' => 'ManageFile\Controller\ManageFIleController@getProjects',
+    ],
+    'post'   => [
+        'projects' => 'ManageFile\Controller\ManageFIleController@createProjects'
+    ],
+    'put'    => [
+        'projects' => 'ManageFile\Controller\ManageFIleController@updateProject'
+    ],
+    'delete' => [
+        'projects' => 'ManageFile\Controller\ManageFIleController@deleteProject'
+    ]
+];

@@ -18,4 +18,10 @@ class LecturersModel
         $result = DB::Connect()->query("SELECT " . $field . " FROM GiangVien WHERE ID=" . $id . " ");
         return (!empty($result->num_rows)) ? ($result->fetch_assoc())[$field] : '';
     }
+
+    public static function getOneGV($id):array
+    {
+        $result=DB::Connect()->query("SELECT * FROM GiangVien WHERE ID=" . $id . " ");
+        return (!empty($result->num_rows)) ? ($result->fetch_assoc()) : [];
+    }
 }
