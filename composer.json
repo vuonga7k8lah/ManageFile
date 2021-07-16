@@ -1,0 +1,10 @@
+{
+        "autoload":{
+            "psr-4":{
+            "ManageFile\\":"src/"
+                }
+        },
+  "require": {
+    "ext-mysqli": "*"
+  }
+}
