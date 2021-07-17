@@ -69,7 +69,7 @@ class FilesModel
         return DB::Connect()->query("DELETE FROM `DoAn` WHERE ID=" . $id . " ");
     }
 
-    public function getFields($id, $field)
+    public static function getFields($id, $field)
     {
         $result = DB::Connect()->query("SELECT " . $field . " FROM DoAn WHERE ID=" . $id . " ");
         return (!empty($result)) ? ($result->fetch_assoc())[$field] : '';

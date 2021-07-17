@@ -10,7 +10,7 @@ require_once 'src/Shares/function.php';
 ini_set("allow_url_fopen", true);
 App::bind('config/app', require_once 'config/app.php');
 App::bind('config/route.php', require_once 'config/router.php');
-if (Request::method()=='GET'){
+if (Request::method()=='GET' || Request::method()=='DELETE'){
     if (count($_GET) > 1 || count(explode('/', Request::uri()))>1) {
         $aData = $_GET;
         unset($aData['route']);

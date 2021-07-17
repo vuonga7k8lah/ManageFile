@@ -11,12 +11,20 @@ use ManageFile\Models\LecturersModel;
 
 class ManageFIleController
 {
-    public function createProjects($aData)
+    protected array $defileData
+        = [
+            'TenDA',
+            'IDGV',
+            'MoTa'
+        ];
+
+    public function createProject($aData)
     {
         try {
             if (!isset($_FILES) || empty($_FILES['files'])) {
                 throw new Exception('Chua Upload', 400);
             }
+            checkDataIsset($this->defileData, $aData);
             if (checkDataEmpty($aData)) {
                 $aData['DinhKem'] = uploadFile($_FILES['files']);
                 $status = FilesModel::insert($aData);
@@ -34,8 +42,8 @@ class ManageFIleController
 
     public function getProjects($aData)
     {
-        $limit = $aData['limit'] ?? 1;
-        $page = $aData['page'] ?? 1;
+        $limit =(int) (isset($aData['limit']) && !empty($aData['limit'])) ?$aData['limit']: 1;
+        $page = (int) (isset($aData['page']) && !empty($aData['page'])) ?$aData['page']: 1;
         $id = $aData['ID'] ?? '';
         $aData = [];
         $aRawData = FilesModel::getAll($id, $limit, $page);
@@ -58,14 +66,12 @@ class ManageFIleController
             ];
         }
         if (count($aRawData) == 1) {
-            $aResponse = [
-                $aData
-            ];
+            $aResponse = $aData;
         } else {
             $aResponse = [
                 'items' => $aData,
-                'limit' => 10,
-                'page'  => ceil(FilesModel::countProject() / 10)
+                'limit' => $limit,
+                'page'  => ceil(FilesModel::countProject() / $limit)
             ];
         }
         echo HandleResponse::success('list data', $aResponse);
@@ -85,6 +91,28 @@ class ManageFIleController
                     die();
                 } else {
                     throw new Exception('create Project  error', 400);
+                }
+            }
+        } catch (Exception $exception) {
+            echo HandleResponse::error($exception->getMessage(), $exception->getCode());
+        }
+    }
+
+    public function deleteProject($aData)
+    {
+        try {
+            if (checkDataEmpty($aData)) {
+                if (!FilesModel::isProjectExist($aData['ID'])) {
+                    throw new Exception('Project Chưa Tồn Tại', 400);
+                }
+                $status = FilesModel::delete($aData['ID']);
+                $nameFile = FilesModel::getFields($aData['ID'], 'DinhKem');
+                unlink('./assets/uploads/files/' . $nameFile);
+                if ($status) {
+                    echo HandleResponse::success('DELETE Project successfully');
+                    die();
+                } else {
+                    throw new Exception('DELETE Project  error', 400);
                 }
             }
         } catch (Exception $exception) {

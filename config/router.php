@@ -1,16 +1,21 @@
 <?php
 return [
     'get'    => [
-        'projects' => 'ManageFile\Controller\ManageFIleController@getProjects',
-        'projects/' => 'ManageFile\Controller\ManageFIleController@getProjects',
+        'projects'   => 'ManageFile\Controller\ManageFIleController@getProjects',
+        'lecturers'  => 'ManageFile\Controller\LecturerController@getLecturers',
+        'lecturers/' => 'ManageFile\Controller\LecturerController@getLecturers',
+        'projects/'  => 'ManageFile\Controller\ManageFIleController@getProjects',
     ],
     'post'   => [
-        'projects' => 'ManageFile\Controller\ManageFIleController@createProjects'
+        'projects'  => 'ManageFile\Controller\ManageFIleController@createProject',
+        'lecturers' => 'ManageFile\Controller\LecturerController@createLecturer',
     ],
     'put'    => [
-        'projects' => 'ManageFile\Controller\ManageFIleController@updateProject'
+        'projects'  => 'ManageFile\Controller\ManageFIleController@updateProject',
+        'lecturers' => 'ManageFile\Controller\LecturerController@updatelecturer',
     ],
     'delete' => [
-        'projects' => 'ManageFile\Controller\ManageFIleController@deleteProject'
+        'projects'  => 'ManageFile\Controller\ManageFIleController@deleteProject',
+        'lecturers' => 'ManageFile\Controller\LecturerController@deletelecturer',
     ]
 ];
