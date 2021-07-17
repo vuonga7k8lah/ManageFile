@@ -8,6 +8,7 @@ use ManageFile\Database\DB;
 require_once 'vendor/autoload.php';
 require_once 'src/Shares/function.php';
 ini_set("allow_url_fopen", true);
+ini_set('default_charset', 'utf-8');
 App::bind('config/app', require_once 'config/app.php');
 App::bind('config/route.php', require_once 'config/router.php');
 if (Request::method()=='GET' || Request::method()=='DELETE'){
@@ -25,6 +26,8 @@ if (Request::method()=='GET' || Request::method()=='DELETE'){
             $aData['ID'] = $aURI[1];
         }
         Route::Load('config/route.php')->directRoute($aData, strtolower(Request::method()));
+    }else{
+        Route::Load('config/route.php')->direct(Request::uri(), strtolower(Request::method()));
     }
 }
  else {

@@ -40,11 +40,17 @@ class ManageFIleController
         }
     }
 
-    public function getProjects($aData)
+    public function getProjects($aDataParam)
     {
-        $limit =(int) (isset($aData['limit']) && !empty($aData['limit'])) ?$aData['limit']: 1;
-        $page = (int) (isset($aData['page']) && !empty($aData['page'])) ?$aData['page']: 1;
-        $id = $aData['ID'] ?? '';
+        $id = '';
+        if (isset($aDataParam['ID']) && !empty($aDataParam['ID'])) {
+            $limit = 1;
+            $page = 1;
+            $id = $aDataParam['ID'];
+        } else {
+            $limit = (int)(isset($aDataParam['limit']) && !empty($aDataParam['limit'])) ? $aDataParam['limit'] : 1000;
+            $page = (int)(isset($aDataParam['page']) && !empty($aDataParam['page'])) ? $aDataParam['page'] : 1;
+        }
         $aData = [];
         $aRawData = FilesModel::getAll($id, $limit, $page);
         foreach ($aRawData as $data) {
@@ -65,14 +71,20 @@ class ManageFIleController
                 'ceate_date' => $data[5],
             ];
         }
-        if (count($aRawData) == 1) {
+        if (!empty($id)) {
             $aResponse = $aData;
         } else {
-            $aResponse = [
-                'items' => $aData,
-                'limit' => $limit,
-                'page'  => ceil(FilesModel::countProject() / $limit)
-            ];
+            if (count($aDataParam) == 1) {
+                $aResponse = [
+                    'items' => $aData
+                ];
+            } else {
+                $aResponse = [
+                    'items' => $aData,
+                    'limit' => $limit,
+                    'page'  => ceil(FilesModel::countProject() / $limit)
+                ];
+            }
         }
         echo HandleResponse::success('list data', $aResponse);
         die();

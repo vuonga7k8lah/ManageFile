@@ -46,4 +46,28 @@ class LecturersModel
         $result = DB::Connect()->query("SELECT count(ID) as ID FROM GiangVien")->fetch_assoc();
         return !empty($result) ?(int) $result['ID'] : 0;
     }
+    public static function update($id, $aData)
+    {
+        $query = [];
+        if ($aData['TenGV'] ?? '') {
+            $query[] = " TenGV ='" . $aData['TenGV'] . "'";
+        }
+        if ($aData['DiaChi'] ?? '') {
+            $query [] = " DiaChi = " . $aData['DiaChi'];
+        }
+        if ($aData['SDT'] ?? '') {
+            $query [] = " SDT = '" . $aData['SDT'] . "'";
+        }
+        if (isset($aData['Khoa'])) {
+            $query [] = " Khoa = '" . $aData['Khoa'] . "'";
+        }
+        $query = array_merge($query, [" CreateDate = null"]);
+        $sql = "UPDATE `GiangVien` SET " . implode(',', $query) . " WHERE ID='" . $id . "'";
+
+        return DB::Connect()->query($sql);
+    }
+    public static function delete($id)
+    {
+        return DB::Connect()->query("DELETE FROM `GiangVien` WHERE ID=" . $id . " ");
+    }
 }

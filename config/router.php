@@ -7,6 +7,7 @@ return [
         'projects/'  => 'ManageFile\Controller\ManageFIleController@getProjects',
     ],
     'post'   => [
+        'login'     => 'ManageFile\Controller\UserController@login',
         'projects'  => 'ManageFile\Controller\ManageFIleController@createProject',
         'lecturers' => 'ManageFile\Controller\LecturerController@createLecturer',
     ],
