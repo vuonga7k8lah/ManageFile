@@ -50,7 +50,7 @@ class FilesModel
             $query[] = " IDGV ='" . $aData['IDGV'] . "'";
         }
         if ($aData['TenDA'] ?? '') {
-            $query [] = " TenDA = " . $aData['TenDA'];
+            $query [] = " TenDA = '" . $aData['TenDA'] . "'";
         }
         if ($aData['MoTa'] ?? '') {
             $query [] = " MoTA = '" . $aData['MoTa'] . "'";
@@ -60,7 +60,6 @@ class FilesModel
         }
         $query = array_merge($query, [" CreateDate = null"]);
         $sql = "UPDATE `DoAn` SET " . implode(',', $query) . " WHERE ID='" . $id . "'";
-
         return DB::Connect()->query($sql);
     }
 

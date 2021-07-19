@@ -94,6 +94,14 @@ class ManageFIleController
     {
         try {
             if (checkDataEmpty($aData)) {
+                checkDataIsset(['ID'], $aData);
+                if (isset($_FILES['files'])) {
+                    if (empty($_FILES['files'])) {
+                        throw new Exception('Chua Upload', 400);
+                    } else {
+                        $aData['DinhKem'] = uploadFile($_FILES['files']);
+                    }
+                }
                 if (!FilesModel::isProjectExist($aData['ID'])) {
                     throw new Exception('Project Chưa Tồn Tại', 400);
                 }
@@ -102,7 +110,7 @@ class ManageFIleController
                     echo HandleResponse::success('update Project successfully');
                     die();
                 } else {
-                    throw new Exception('create Project  error', 400);
+                    throw new Exception('update Project  error', 400);
                 }
             }
         } catch (Exception $exception) {

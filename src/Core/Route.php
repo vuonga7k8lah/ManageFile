@@ -73,7 +73,6 @@ class Route
                 $aData = $_POST;
                 break;
             case 'PUT':
-                header('Content-Type: application/json; charset=utf-8');
                 $aData = [];
                 $rawData = file_get_contents("php://input");
                 foreach (explode('&', $rawData) as $data) {
